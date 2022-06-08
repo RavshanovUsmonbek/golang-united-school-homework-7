@@ -122,6 +122,9 @@ func TestPersonSortWithLastName(t *testing.T){
 	}
 }
 //////////////////////// Matrix tests
+var TestString string = "1 2 3\n3 4 5\n 9 9 9"
+var MatrixCreateErrorMsg string = "Unable to create matrix"
+var ErrorMsg string = "Expected: %d, got: %d"
 
 func TestMatrixCreateWithDifferentRowLength(t *testing.T){
 	testString := "1 2 3\n2 3 4\n4"
@@ -140,9 +143,8 @@ func TestMatrixCreateWithNotNumbers(t *testing.T){
 }
 
 func TestMatrixCreateSuccessCase(t *testing.T){
-	testString := "1 2 3\n3 4 5\n 9 9 9"
 	expectedMatrix := []int{1, 2, 3, 3, 4, 5, 9, 9, 9}
-	matrix, err := New(testString)
+	matrix, err := New(TestString)
 	if err != nil {
 		t.Errorf("Unexpected matrix failure with error: %s", err)
 	}
@@ -161,26 +163,25 @@ func TestMatrixCreateSuccessCase(t *testing.T){
 }
 
 func TestGetMatrixInRowRepresentation(t *testing.T){
-	testString := "1 2 3\n3 4 5\n 9 9 9"
 	expectedMatrix := [][]int{{1, 2, 3}, {3, 4, 5}, {9, 9, 9}}
-	matrix, err := New(testString)
+	matrix, err := New(TestString)
 	if err != nil {
-		t.Error("Unable to create matrix")
+		t.Error(MatrixCreateErrorMsg)
 	}
 
 	rows := matrix.Rows()
 	if len(rows) != len(expectedMatrix){
-		t.Errorf("Number of rows expected: %d, got: %d", len(expectedMatrix), len(rows))
+		t.Errorf("Number of rows " + ErrorMsg, len(expectedMatrix), len(rows))
 	}
 	for rowIndex, row := range rows {
 		if len(row) != len(expectedMatrix[rowIndex]){
 			expLength := len(expectedMatrix[rowIndex])
-			t.Errorf("Row's length doesn't match. Expected: %d, got: %d", expLength, len(row))
+			t.Errorf("Row's length doesn't match. "+ ErrorMsg, expLength, len(row))
 		}
 		for colIndex, elem := range row {
 			if expectedMatrix[rowIndex][colIndex] != elem {
 				expEl := expectedMatrix[rowIndex][colIndex]
-				t.Errorf("Elements don't match. Expected: %d, got: %d", expEl, elem)
+				t.Errorf("Elements don't match. " + ErrorMsg, expEl, elem)
 			}
 		}
 	}
@@ -188,12 +189,11 @@ func TestGetMatrixInRowRepresentation(t *testing.T){
 
 
 func TestGetMatrixInColRepresentation(t *testing.T){
-	testString := "1 2 3\n3 4 5\n 9 9 9"
 	expectedMatrix := [][]int{{1, 3, 9}, {2, 4, 9}, {3, 5, 9}}
-	matrix, err := New(testString)
+	matrix, err := New(TestString)
 
 	if err != nil {
-		t.Error("Unable to create matrix")
+		t.Error(MatrixCreateErrorMsg)
 	}
 
 	cols := matrix.Cols()
@@ -203,23 +203,22 @@ func TestGetMatrixInColRepresentation(t *testing.T){
 	for colIndex, col := range cols {
 		if len(col) != len(expectedMatrix[colIndex]){
 			expLength := len(expectedMatrix[colIndex])
-			t.Errorf("Column's length doesn't match. Expected: %d, got: %d", expLength, len(col))
+			t.Errorf("Column's length doesn't match. "+ ErrorMsg, expLength, len(col))
 		}
 		for rowIndex, elem := range col {
 			if expectedMatrix[colIndex][rowIndex] != elem {
 				expEl := expectedMatrix[colIndex][rowIndex]
-				t.Errorf("Elements don't match. Expected: %d, got: %d", expEl, elem)
+				t.Errorf("Elements don't match. "+ ErrorMsg, expEl, elem)
 			}
 		}
 	}
 }
 
 func TestSetValueWithRowSmallerThanZero(t *testing.T){
-	testString := "1 2 3\n3 4 5\n 9 9 9"
-	matrix, err := New(testString)
+	matrix, err := New(TestString)
 
 	if err != nil {
-		t.Error("Unable to create matrix")
+		t.Error(MatrixCreateErrorMsg)
 	}
 	isSet := matrix.Set(2, -1, 56)
 	if isSet {
@@ -228,11 +227,10 @@ func TestSetValueWithRowSmallerThanZero(t *testing.T){
 }
 
 func TestSetValueWithRowGreaterThanMaxRowCount(t *testing.T){
-	testString := "1 2 3\n3 4 5\n 9 9 9"
-	matrix, err := New(testString)
+	matrix, err := New(TestString)
 
 	if err != nil {
-		t.Error("Unable to create matrix")
+		t.Error(MatrixCreateErrorMsg)
 	}
 	isSet := matrix.Set(2, 5, 56)
 	if isSet {
@@ -241,11 +239,10 @@ func TestSetValueWithRowGreaterThanMaxRowCount(t *testing.T){
 }
 
 func TestSetValueWithColSmallerThanZero(t *testing.T){
-	testString := "1 2 3\n3 4 5\n 9 9 9"
-	matrix, err := New(testString)
+	matrix, err := New(TestString)
 
 	if err != nil {
-		t.Error("Unable to create matrix")
+		t.Error(MatrixCreateErrorMsg)
 	}
 	isSet := matrix.Set(-1, 2, 56)
 	if isSet {
@@ -254,11 +251,10 @@ func TestSetValueWithColSmallerThanZero(t *testing.T){
 }
 
 func TestSetValueWithColumnGreaterThanMaxRowCount(t *testing.T){
-	testString := "1 2 3\n3 4 5\n 9 9 9"
-	matrix, err := New(testString)
+	matrix, err := New(TestString)
 
 	if err != nil {
-		t.Error("Unable to create matrix")
+		t.Error(MatrixCreateErrorMsg)
 	}
 	isSet := matrix.Set(5, 1, 56)
 	if isSet {
@@ -268,14 +264,13 @@ func TestSetValueWithColumnGreaterThanMaxRowCount(t *testing.T){
 
 
 func TestSetValueSuccessCase(t *testing.T){
-	testString := "1 2 3\n3 4 5\n 9 9 9"
-	matrix, err := New(testString)
+	matrix, err := New(TestString)
 	row := 1
 	col := 1
 	value := 56
 
 	if err != nil {
-		t.Error("Unable to create matrix")
+		t.Error(MatrixCreateErrorMsg)
 	}
 	isSet := matrix.Set(row, col, value)
 	if !isSet {
@@ -284,7 +279,7 @@ func TestSetValueSuccessCase(t *testing.T){
 	
 	if matrix.data[row*matrix.cols+col] != value {
 		expected := matrix.data[row*matrix.cols+col]
-		t.Errorf("elements don't match after set. Expected: %d, got: %d", expected, value)
+		t.Errorf("elements don't match after set. "+ ErrorMsg, expected, value)
 	} 
 }
 
